@@ -15,6 +15,7 @@ import pl.training.recipes.adapters.persistence.RoomRecipesMapper
 import pl.training.recipes.adapters.provider.HttpRecipesProvider
 import pl.training.recipes.adapters.provider.HttpRecipesProviderAdapter
 import pl.training.recipes.adapters.provider.HttpRecipesProviderMapper
+import pl.training.recipes.domain.LoadCachedRecipesUseCase
 import pl.training.recipes.domain.RecipesProvider
 import pl.training.recipes.domain.RecipesRepository
 import pl.training.recipes.domain.RefreshRecipesUseCase
@@ -60,14 +61,6 @@ class RecipesModule {
 
     @Singleton
     @Provides
-    fun getRecipesUseCase(
-        provider: RecipesProvider,
-        repository: RecipesRepository
-    ): RefreshRecipesUseCase =
-        RefreshRecipesUseCase(provider, repository)
-
-    @Singleton
-    @Provides
     fun database(@ApplicationContext context: Context): RecipesDatabase = Room
         .databaseBuilder(context, RecipesDatabase::class.java, "recipes")
         .fallbackToDestructiveMigration()
@@ -84,5 +77,18 @@ class RecipesModule {
         mapper: RoomRecipesMapper
     ): RecipesRepository =
         RoomRecipesAdapter(database.recipesDao(), mapper)
+
+    @Singleton
+    @Provides
+    fun refreshRecipesUseCase(
+        provider: RecipesProvider,
+        repository: RecipesRepository
+    ): RefreshRecipesUseCase =
+        RefreshRecipesUseCase(provider, repository)
+
+    @Singleton
+    @Provides
+    fun loadCachedRecipesUseCase(repository: RecipesRepository): LoadCachedRecipesUseCase =
+        LoadCachedRecipesUseCase(repository)
 
 }

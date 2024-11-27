@@ -1,5 +1,6 @@
 package pl.training.recipes.adapters.view
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,5 +34,10 @@ class RecipesViewAdapter(private var recipes: List<RecipeViewModel> = emptyList(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.update(recipes[position])
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun update(recipes: List<RecipeViewModel>) {
+        this.recipes = recipes
+        notifyDataSetChanged()
+    }
 
 }

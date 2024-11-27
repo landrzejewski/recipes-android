@@ -1,6 +1,6 @@
 package pl.training.recipes.domain
 
-class Recipe(
+data class Recipe(
     val id: Long,
     val name: String,
     val ingredients: List<String>,

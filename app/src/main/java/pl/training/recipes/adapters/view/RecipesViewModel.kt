@@ -10,6 +10,7 @@ import pl.training.recipes.R
 import pl.training.recipes.common.ViewState
 import pl.training.recipes.common.ViewState.Failure
 import pl.training.recipes.common.ViewState.Initial
+import pl.training.recipes.common.ViewState.Processing
 import pl.training.recipes.common.ViewState.Success
 import pl.training.recipes.domain.GetRecipesUseCase
 import pl.training.recipes.domain.Recipe
@@ -27,6 +28,7 @@ class RecipesViewModel @Inject constructor(
     fun refresh() {
         viewModelScope.launch {
             try {
+                state.postValue(Processing)
                 val data = getRecipesUseCase.execute().map(::toView)
                 state.postValue(Success(data))
             } catch (_: Exception) {

@@ -1,18 +1,16 @@
 package pl.training.recipes.adapters.view
 
 import android.os.Bundle
-import android.widget.TextView
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import dagger.hilt.android.AndroidEntryPoint
-import pl.training.recipes.R
 import pl.training.recipes.common.ViewState
 import pl.training.recipes.common.ViewState.Failure
 import pl.training.recipes.common.ViewState.Initial
@@ -44,13 +42,19 @@ class RecipesActivity : AppCompatActivity() {
 
     private fun update(viewState: ViewState) = when (viewState) {
         is Initial -> {}
-        is Processing -> {}
+        is Processing -> binding.progressIndicator.visibility = VISIBLE
         is Success<*> -> showRecipes(viewState.get())
-        is Failure -> Toast.makeText(this, getString(viewState.messageId), LENGTH_LONG).show()
+        is Failure -> showError(viewState.messageId)
     }
 
     private fun showRecipes(recipes: List<RecipeViewModel>) {
+        binding.progressIndicator.visibility = GONE
         adapter.update(recipes)
+    }
+
+    private fun showError(messageId: Int) {
+        binding.progressIndicator.visibility = GONE
+        Toast.makeText(this, getString(messageId), LENGTH_LONG).show()
     }
 
 }

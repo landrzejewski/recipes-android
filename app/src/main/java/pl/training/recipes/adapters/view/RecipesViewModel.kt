@@ -45,11 +45,11 @@ class RecipesViewModel @Inject constructor(
         job = viewModelScope.launch {
             try {
                 state.postValue(Processing)
-                withTimeout(3_000) {
+                //withTimeout(3_000) {
                     //delay(5_000)
                     val data = refreshRecipesUseCase.execute().map(::toView)
                     state.postValue(Success(data))
-                }
+                //}
             } catch (c: CancellationException) {
                 state.postValue(Success(emptyList<RecipeViewModel>()))
             } catch (refreshFailed: RefreshFailedException) {

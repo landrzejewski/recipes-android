@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -36,9 +38,20 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 dependencies {
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
     implementation(libs.converter.gson)
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)

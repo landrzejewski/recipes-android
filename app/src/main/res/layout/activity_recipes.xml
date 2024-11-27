@@ -8,26 +8,24 @@
     android:background="@color/black"
     tools:context=".adapters.view.RecipesActivity">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin"
-        android:text="@string/recipes_title"
-        android:textColor="@color/white"
-        android:textSize="@dimen/title_size"
-        app:layout_constraintEnd_toStartOf="@id/refresh_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/refresh_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin"
         android:text="@string/refresh"
-        app:layout_constraintBaseline_toBaselineOf="@id/title"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:text="@string/cancel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/refresh_button"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipes"

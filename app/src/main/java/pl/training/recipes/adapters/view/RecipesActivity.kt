@@ -35,7 +35,8 @@ class RecipesActivity : AppCompatActivity() {
 
         binding.recipes.layoutManager = LinearLayoutManager(this, VERTICAL, false)
         binding.recipes.adapter = adapter
-        binding.refreshButton.setOnClickListener { viewModel.refresh()  }
+        binding.refreshButton.setOnClickListener { viewModel.refresh() }
+        binding.cancelButton.setOnClickListener { viewModel.cancel() }
 
         viewModel.viewState.observe(this, ::update)
 

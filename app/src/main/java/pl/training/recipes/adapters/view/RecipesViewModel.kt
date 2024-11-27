@@ -5,7 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import pl.training.recipes.R
 import pl.training.recipes.common.ViewState
 import pl.training.recipes.common.ViewState.Failure
@@ -15,6 +19,7 @@ import pl.training.recipes.common.ViewState.Success
 import pl.training.recipes.domain.LoadCachedRecipesUseCase
 import pl.training.recipes.domain.RefreshRecipesUseCase
 import pl.training.recipes.domain.Recipe
+import pl.training.recipes.domain.RefreshFailedException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +29,7 @@ class RecipesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val state = MutableLiveData<ViewState>(Initial)
+    private var job: Job? = null
 
     val viewState: LiveData<ViewState> = state
 
@@ -36,15 +42,25 @@ class RecipesViewModel @Inject constructor(
     }
 
     fun refresh() {
-        viewModelScope.launch {
+        job = viewModelScope.launch {
             try {
                 state.postValue(Processing)
-                val data = refreshRecipesUseCase.execute().map(::toView)
-                state.postValue(Success(data))
-            } catch (_: Exception) {
+                withTimeout(3_000) {
+                    //delay(5_000)
+                    val data = refreshRecipesUseCase.execute().map(::toView)
+                    state.postValue(Success(data))
+                }
+            } catch (c: CancellationException) {
+                state.postValue(Success(emptyList<RecipeViewModel>()))
+            } catch (refreshFailed: RefreshFailedException) {
                 state.postValue(Failure(R.string.refresh_recipes_failed))
             }
         }
+
+    }
+
+    fun cancel() {
+        job?.cancel()
     }
 
     private fun toView(recipe: Recipe) = with(recipe) {

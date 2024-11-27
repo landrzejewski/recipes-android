@@ -3,4 +3,5 @@
     <string name="recipes_title">Recipes</string>
     <string name="refresh_recipes_failed">Refresh recipes failed</string>
     <string name="refresh">Refresh</string>
+    <string name="cancel">Cancel</string>
 </resources>

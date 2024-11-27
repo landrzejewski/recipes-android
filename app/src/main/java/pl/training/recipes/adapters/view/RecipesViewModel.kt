@@ -12,13 +12,13 @@ import pl.training.recipes.common.ViewState.Failure
 import pl.training.recipes.common.ViewState.Initial
 import pl.training.recipes.common.ViewState.Processing
 import pl.training.recipes.common.ViewState.Success
-import pl.training.recipes.domain.GetRecipesUseCase
+import pl.training.recipes.domain.RefreshRecipesUseCase
 import pl.training.recipes.domain.Recipe
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipesViewModel @Inject constructor(
-    private val getRecipesUseCase: GetRecipesUseCase
+    private val refreshRecipesUseCase: RefreshRecipesUseCase
 ) : ViewModel() {
 
     private val state = MutableLiveData<ViewState>(Initial)
@@ -29,7 +29,7 @@ class RecipesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 state.postValue(Processing)
-                val data = getRecipesUseCase.execute().map(::toView)
+                val data = refreshRecipesUseCase.execute().map(::toView)
                 state.postValue(Success(data))
             } catch (_: Exception) {
                 state.postValue(Failure(R.string.refresh_recipes_failed))

@@ -1,12 +1,16 @@
 package pl.training.recipes.adapters.view
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -46,7 +50,7 @@ class RecipesViewModel @Inject constructor(
             try {
                 state.postValue(Processing)
                 //withTimeout(3_000) {
-                    //delay(5_000)
+                    delay(5_000)
                     val data = refreshRecipesUseCase.execute().map(::toView)
                     state.postValue(Success(data))
                 //}
